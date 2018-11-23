@@ -1,0 +1,140 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shop-button.html">
+<link rel="import" href="shop-image.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="artm-category-data.html">
+
+<dom-module id="artm-home">
+
+  <template>
+
+    <style> 
+
+ 	.vertical-section-container {
+        max-width: 500px;
+        margin-left: auto;
+    	margin-right: auto;
+    }
+         
+     paper-card {
+        width: 100%;
+        min-height: 200px;
+        margin-bottom: 10px;
+     }
+     
+
+  	.card-header { @apply(--paper-font-headline); }
+  
+  	paper-card.tutvustus {
+  		--paper-card-header-color: #fff !important;  
+  	}
+    
+
+      
+    </style>
+
+	<div class="vertical-section-container centered">
+	<paper-card  elevation="0">
+		
+  		<div class="card-content tutvustus">		
+				<p>
+					<span id="tutvustus">
+					OÜ Artmoments on kunsti ja disainiga tegelev väikeettevõte.
+					Meie põhitegevuseks on dekoratiivmaalide valmistamine ja müük.
+					</span>
+				</p>
+				<p>
+					Lõuendile maalitud originaallooming valmib käsitööna, alusraamile löödud lõuendil,
+					akrüülvärvidega. Tellida on võimalik erinevas mõõdus ja koloriidis.
+					Juhul kui Te ei leidnud sealt endale sobivat maali kodulehelt siis
+					kirjeldage oma nägemust ja maal valmib teie visiooni järgi.
+					Abiks on ka foto ruumist kuhu maali soovite. Vajadusel tuleb kunstnik kohale.
+				</p>				
+				<p>
+					<h3>Tellimine</h3>
+					Maal lõuendil - 230€ ruutmeeter<br>
+					Seinamaalingud  (hind sõltub töö keerukusest ja materjalikulust)<br>
+					Maalide rentimine - 1 kuu 10% maali hinnast. Edaspidi 5%<br>		
+				</p>
+				<p>
+					<span>Meeldivaid kunstihetki soovides,<br>Teie Artmoments
+					</span>
+				</p>
+  		</div>
+
+	</paper-card>
+	
+	<artm-category-data
+       id="categoryData"
+       category-name="[[item.name]]"
+       category="{{category}}">
+     </artm-category-data>
+        	
+     <dom-repeat items="[[categories]]" >
+      <template strip-whitespace>
+
+        <div class="item">
+          <a class="image-link" href$="/maalid/[[item.name]]">
+            <shop-image src$="[[_categoryImage(item)]]" alt="[[item.title]]" placeholder-img="[[item.placeholder]]"></shop-image>
+          </a>
+        </div>
+      </template>
+    </dom-repeat> 
+	</div>
+  </template>
+
+  <script>
+
+    class ArtmHome extends Polymer.Element {
+
+      static get is() { return 'artm-home'; }
+
+      static get properties() { return {
+ 
+    	  
+    	category: Object,  
+    	  
+        categories: {
+          type: Array
+        },
+
+        visible: {
+          type: Boolean,
+          observer: '_visibleChanged'
+        }
+
+      }}
+
+      _visibleChanged(visible) {
+        if (visible) {
+          this.dispatchEvent(new CustomEvent('change-section', {
+            bubbles: true, composed: true, detail: {title: 'Artmoments'}}));
+        }
+      }
+      
+      _categoryImage(item){
+    	  this.set('item', item);
+    	  console.log(item);
+    	  console.log(this.category);
+    	  return "/data/catalog/thumbnail/xxx.jpeg";
+     	}
+
+    }
+
+    customElements.define(ArtmHome.is, ArtmHome);
+
+  </script>
+
+</dom-module>
